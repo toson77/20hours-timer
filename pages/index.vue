@@ -48,7 +48,9 @@
               rel="noopener noreferrer"
               title="contribute"
             >
-              issue board
+              <p>
+                issue board
+              </p>
             </a>.
           </p>
           <p>Thank you for developing with Vuetify and I look forward to bringing more exciting features in the future.</p>
