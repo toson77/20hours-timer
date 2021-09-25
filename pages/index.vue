@@ -11,8 +11,6 @@
     <p>chinone </p>
     <p>!</p>
       <v-card class="logo py-4 d-flex justify-center">
-        <NuxtLogo />
-        <VuetifyLogo />
       </v-card>
       <v-card>
         <v-card-title class="headline">
@@ -82,6 +80,12 @@
             to="/inspire"
           >
             Continue
+          </v-btn>
+          <v-btn
+            nuxt
+            to="/newuser"
+          >
+            newuser
           </v-btn>
         </v-card-actions>
       </v-card>
