@@ -8,6 +8,7 @@
       sm="8"
       md="6"
     >
+    <p>chinone </p>
       <v-card class="logo py-4 d-flex justify-center">
         <NuxtLogo />
         <VuetifyLogo />
