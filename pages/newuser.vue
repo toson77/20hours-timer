@@ -57,8 +57,8 @@
 </template>
 
 <script>
-import myHeader from '~/layouts/loginheader.vue'
-import myFooter from '~/layouts/footer.vue'
+import myHeader from '~/components/loginheader.vue'
+import myFooter from '~/components/footer.vue'
 
 export default {
   components: {
