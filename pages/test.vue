@@ -1,10 +1,11 @@
 <template>
+    <v-main>
     <v-container
         style="max-width: 500px"
     >
         
 
-        <h2 class="display-1 white--text pl-3">
+        <h2 class="display-1 success--text pl-3">
             Tasks:&nbsp;
             <v-fade-transition leave-absolute>
                 <span :key="`tasks-${tasks.length}`">
@@ -19,7 +20,7 @@
         my-1
         align-center
         >
-            <strong class="mx-3 black--text ">
+            <strong class="mx-3 info--text text--darken-3">
                 進行中: {{ remainingTasks }}
             </strong>
 
@@ -88,7 +89,6 @@
                             icon
                         >
                             <i class="mdi mdi-delete"
-                                
                             />
                         </v-btn>
 
@@ -96,8 +96,13 @@
                 </template>
             </v-slide-y-transition>
         </v-card>
-        <br>
-        <v-text-field
+        
+    </v-container>
+
+    <v-container
+        style="max-width: 450px"
+    >
+            <v-text-field
             v-model="task"
             label="Add Task"
             solo
@@ -112,7 +117,9 @@
                 />
             </v-fade-transition>
         </v-text-field>
+            
     </v-container>
+    </v-main>
 </template>
 
 

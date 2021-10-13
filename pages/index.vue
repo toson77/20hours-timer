@@ -1,30 +1,36 @@
 <template>
-  <v-app>
+  <v-app class="light-blue darken-3">
     <my-header />
     <v-main>
+      <br>
      <!-- ここに自由に追記 -->
+     <my-timer />
      <my-task />
-     <my-skill />
+     <my-skills />
     </v-main>
     <my-footer />
   </v-app>
 </template>
 
 <script>
-import myHeader from '~/components/header.vue'
-import myFooter from '~/components/footer.vue'
+import myHeader from '~/layouts/header.vue'
+import myFooter from '~/layouts/footer.vue'
 import myTask from '~/components/task.vue'
-import mySkill from '~/components/skill.vue'
+import mySkills from '~/components/skills.vue'
+import myTimer from '~/components/timer.vue'
 
 export default {
   components: {
     myHeader,
     myFooter,
     myTask,
-    mySkill
+    mySkills,
+    myTimer
   },
   data: () => ({
     appName: "20時間タイマー"
   })
 }
 </script>
+
+
