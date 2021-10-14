@@ -14,6 +14,7 @@
                 text
                 height="28px"
                 color="white"
+                @click="state = '20hour'" 
                >
                    20 hour
                </v-btn>
@@ -21,6 +22,7 @@
                 text
                 height="28px"
                 color="white"
+                @click="state = '20min'" 
                >
                    20 min
                </v-btn>
@@ -28,6 +30,7 @@
                 text
                 height="28px"
                 color="white"
+                @click="state = 'custom'" 
                >
                    custom
                </v-btn>
@@ -37,7 +40,9 @@
            <br>
            <v-row>
                <v-spacer></v-spacer>
-               <strong class="text-h1 white--text font-weight-bold" >20:00:00</strong>
+               <strong class="text-h1 white--text font-weight-bold" v-if="state == '20hour'">20:00:00</strong>
+               <strong class="text-h1 white--text font-weight-bold" v-else-if="state == '20min'">20:00</strong>
+               <strong class="text-h1 white--text font-weight-bold" v-else>00:00:00</strong>
                <v-spacer></v-spacer>
            </v-row>
            <br>
@@ -54,3 +59,10 @@
     </v-container>
 </template>
 
+<script>
+export default {
+  data: () => ({
+      state: '20hour'
+  })
+}
+</script>
