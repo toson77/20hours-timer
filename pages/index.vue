@@ -1,94 +1,36 @@
 <template>
-  <v-row
-    justify="center"
-    align="center"
-  >
-    <v-col
-      cols="12"
-      sm="8"
-      md="6"
-    >
-    <p>chinone </p>
-    <p>!</p>
-      <v-card class="logo py-4 d-flex justify-center">
-      </v-card>
-      <v-card>
-        <v-card-title class="headline">
-          Welcome to the Vuetify + Nuxt.js template
-        </v-card-title>
-        <v-card-text>
-          <p>test</p>
-          <p>test</p>
-          <p>test3</p>
-          <p>
-            For more information on Vuetify, check out the <a
-              href="https://vuetifyjs.com"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              documentation
-            </a>.
-          </p>
-          <p>
-            If you have questions, please join the official <a
-              href="https://chat.vuetifyjs.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="chat"
-            >
-              discord
-            </a>.
-          </p>
-          <p>
-            Find a bug? Report it on the github <a
-              href="https://github.com/vuetifyjs/vuetify/issues"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="contribute"
-            >
-              <p>
-                issue board
-              </p>
-            </a>.
-          </p>
-          <p>Thank you for developing with Vuetify and I look forward to bringing more exciting features in the future.</p>
-          <div class="text-xs-right">
-            <em><small>&mdash; John Leider</small></em>
-          </div>
-          <hr class="my-3">
-          <a
-            href="https://nuxtjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Nuxt Documentation
-          </a>
-          <br>
-          <a
-            href="https://github.com/nuxt/nuxt.js"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Nuxt GitHub
-          </a>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer />
-          <v-btn
-            color="primary"
-            nuxt
-            to="/inspire"
-          >
-            Continue
-          </v-btn>
-          <v-btn
-            nuxt
-            to="/newuser"
-          >
-            newuser
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-col>
-  </v-row>
+  <v-app class="light-blue darken-3">
+    <my-header />
+    <v-main>
+      <br>
+     <!-- ここに自由に追記 -->
+     <my-timer />
+     <my-task />
+     <my-skills />
+    </v-main>
+    <my-footer />
+  </v-app>
 </template>
+
+<script>
+import myHeader from '~/layouts/header.vue'
+import myFooter from '~/layouts/footer.vue'
+import myTask from '~/components/task.vue'
+import mySkills from '~/components/skills.vue'
+import myTimer from '~/components/timer.vue'
+
+export default {
+  components: {
+    myHeader,
+    myFooter,
+    myTask,
+    mySkills,
+    myTimer
+  },
+  data: () => ({
+    appName: "20時間タイマー"
+  })
+}
+</script>
+
+
