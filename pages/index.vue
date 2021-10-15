@@ -1,14 +1,17 @@
 <template>
-  <v-app class="light-blue darken-3">
-    <my-header />
-    <v-main>
+  <v-app> 
+    <my-header :class="color"/>
+    <v-main :class="color"> 
       <br>
-     <!-- ここに自由に追記 -->
-     <my-timer />
+     <my-timer 
+      v-on:hour="color = $event"
+      v-on:min="color = $event"
+      v-on:custom="color = $event"
+      />
      <my-task />
      <my-skills />
     </v-main>
-    <my-footer />
+    <my-footer :class="color"/>
   </v-app>
 </template>
 
@@ -20,16 +23,16 @@ import mySkills from '~/components/skills.vue'
 import myTimer from '~/components/timer.vue'
 
 export default {
+  data: () => ({
+      color: 'light-blue darken-3'
+  }),
   components: {
     myHeader,
     myFooter,
     myTask,
     mySkills,
     myTimer
-  },
-  data: () => ({
-    appName: "20時間タイマー"
-  })
+  }
 }
 </script>
 
