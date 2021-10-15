@@ -86,6 +86,7 @@
                         <v-btn
                             text
                             icon
+                            @click = "deleteTasks(task)"
                         >
                             <i class="mdi mdi-delete"
                                 
@@ -145,8 +146,11 @@ export default {
         done: false,
         text: this.task
       })
-
       this.task = null
+    },
+    deleteTasks(task) {
+        let index = this.tasks.indexOf(task)
+        this.tasks.splice(index, 1)
     }
   }
 }
