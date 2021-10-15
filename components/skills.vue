@@ -107,13 +107,7 @@
 <script>
 export default {
   data: () => ({
-    skills: [
-      {
-        power: 0,
-        done: false,
-        text: 'スキル'
-      }
-    ],
+    skills: [],
     skill: null,
     change: "light-blue darken-2",
   }),
@@ -122,7 +116,12 @@ export default {
       return this.skills.filter(skill => skill.done).length
     },
     progress () {
-      return this.completedskills / this.skills.length * 100
+        if (this.skills.length === 0) {
+            return 0
+        }
+        else {
+            return this.completedskills / this.skills.length * 100
+        }
     },
     remainingskills () {
       return this.skills.length - this.completedskills
