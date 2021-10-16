@@ -14,7 +14,7 @@
                 text
                 height="28px"
                 color="white"
-                @click="state = '20hour'" 
+                @click="hour();state = '20hour'" 
                >
                    20 hour
                </v-btn>
@@ -22,7 +22,8 @@
                 text
                 height="28px"
                 color="white"
-                @click="state = '20min'" 
+                @click="min();state = '20min'" 
+                
                >
                    20 min
                </v-btn>
@@ -30,7 +31,7 @@
                 text
                 height="28px"
                 color="white"
-                @click="state = 'custom'" 
+                @click="custom();state = 'custom'" 
                >
                    custom
                </v-btn>
@@ -61,8 +62,19 @@
 
 <script>
 export default {
-  data: () => ({
+    data: () => ({
       state: '20hour'
-  })
+  }),
+  methods: {
+      hour(){
+          this.$emit("hour", 'light-blue darken-3');
+      },
+      min(){
+          this.$emit("min", 'teal lighten-1');
+      },
+      custom(){
+          this.$emit("custom", 'red lighten-1');
+      },
+  }
 }
 </script>
