@@ -26,6 +26,7 @@
               ref="form"
             >
               <v-text-field
+                
                 label="メールアドレスを入力"
                 placeholder="your@email.com"
                 outlined
@@ -53,7 +54,7 @@
 
 <script>
 import myHeader from '~/layouts/loginheader.vue'
-import myFooter from '~/layouts/loginfooter.vue'
+import myFooter from '~/layouts/footer.vue'
 
 export default {
   components: {

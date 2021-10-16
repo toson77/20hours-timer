@@ -31,11 +31,13 @@
                 outlined
               />
               <v-text-field
+                :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
                 label="パスワードを入力"
                 placeholder="8文字以上"
                 outlined
               />
               <v-text-field
+                
                 label="パスワードを再入力"
                 placeholder="8文字以上"
                 outlined
@@ -58,7 +60,7 @@
 
 <script>
 import myHeader from '~/layouts/loginheader.vue'
-import myFooter from '~/layouts/loginfooter.vue'
+import myFooter from '~/layouts/footer.vue'
 
 export default {
   components: {

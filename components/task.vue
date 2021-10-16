@@ -86,6 +86,7 @@
                         <v-btn
                             text
                             icon
+                            @click = "deleteTasks(task)"
                         >
                             <i class="mdi mdi-delete"
                                 
@@ -119,12 +120,7 @@
 <script>
 export default {
   data: () => ({
-    tasks: [
-      {
-        done: false,
-        text: 'タスク'
-      }
-    ],
+    tasks: [],
     task: null
   }),
   computed: {
@@ -132,7 +128,12 @@ export default {
       return this.tasks.filter(task => task.done).length
     },
     progress () {
-      return this.completedTasks / this.tasks.length * 100
+        if(this.tasks.length === 0){
+            return 0
+        }
+        else{
+            return this.completedTasks / this.tasks.length * 100
+        }
     },
     remainingTasks () {
       return this.tasks.length - this.completedTasks
@@ -145,8 +146,11 @@ export default {
         done: false,
         text: this.task
       })
-
       this.task = null
+    },
+    deleteTasks(task) {
+        let index = this.tasks.indexOf(task)
+        this.tasks.splice(index, 1)
     }
   }
 }
