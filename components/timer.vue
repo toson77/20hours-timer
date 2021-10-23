@@ -128,8 +128,8 @@ export default {
       timerOn: false,
       timerObj: null,
 
-      min_20: 0,
-      sec_20: 1,
+      min_20: 20,
+      sec_20: 0,
       timerOn_20: false,
       timerObj_20: null,
       
