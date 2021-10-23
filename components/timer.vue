@@ -43,7 +43,26 @@
                <v-spacer></v-spacer>
                <strong class="text-h1 white--text font-weight-bold" v-if="state == '20hour'">{{ formatTime }}</strong>
                <strong class="text-h1 white--text font-weight-bold" v-else-if="state == '20min'">{{ minTime }}</strong>
-               <strong class="text-h1 white--text font-weight-bold" v-else>00:00:00</strong>
+               <strong class="text-h1 white--text font-weight-bold" v-else-if="state == 'custom' && state_custom == 'on'" @click="mouseover()">{{ customTime }}</strong>
+               <div
+                v-else-if="state == 'custom' && state_custom == 'off'"
+               >
+                    <br>
+                    <vue-timepicker 
+                        format="HH:mm:ss"
+                        hide-clear-button
+                        hour-label="時"
+                        minute-label="分"
+                        second-label="秒"
+                        second-interval="5"
+                        placeholder="時間を入力"
+                        v-model="timestring"
+                        @input="hour_custom = timestring[0] + timestring[1], min_custom = timestring[3] + timestring[4], sec_custom = timestring[6] + timestring[7]"
+                    ></vue-timepicker>
+                    <br>
+                    <br>
+               </div>
+
                <v-spacer></v-spacer>
            </v-row>
            <br>
@@ -75,20 +94,19 @@
                 v-on:click="stop_20"
                 v-if="timerOn_20 && state == '20min'"
                ><strong style="color:#26A69A" class="text-h6">stop</strong></v-btn>
-               <v-btn
-                height="50px"
-                width="180px"
-                v-on:click="stop_20"
-                v-if="none"
-               >reset</v-btn>
-               
 
                <v-btn
                 height="50px"
                 width="180px"
-                
-                v-if="state == 'custom'"
+                @click="start_custom"
+                v-if="!timerOn_custom && state == 'custom'"
                ><strong style="color:#EF5350" class="text-h6">start</strong></v-btn>
+               <v-btn
+                height="50px"
+                width="180px"
+                v-on:click="stop_custom"
+                v-if="timerOn_custom && state == 'custom'"
+               ><strong style="color:#EF5350" class="text-h6">stop</strong></v-btn>
                <v-spacer></v-spacer>
            </v-row>
         </v-card>
@@ -96,8 +114,13 @@
 </template>
 
 <script>
+import VueTimepicker from 'vue2-timepicker'
+import 'vue2-timepicker/dist/VueTimepicker.css'
+
 export default {
     data: () => ({
+      
+    　state_custom: 'on',
       state: '20hour',
       hour_t: 20,
       min_t: 0,
@@ -105,11 +128,23 @@ export default {
       timerOn: false,
       timerObj: null,
 
-      min_20: 20,
-      sec_20: 0,
+      min_20: 0,
+      sec_20: 1,
       timerOn_20: false,
       timerObj_20: null,
+      
+      timestring: '00:00:00',
+    　hour_custom: 0,
+    　min_custom: 0,
+    　sec_custom: 0,
+      timerOn_custom: false,
+      timerObj_custom: null,
+      
+      
   }),
+  components: {
+            'vue-timepicker': VueTimepicker,
+        },
   methods: {
       hour(){
           this.$emit("hour", 'light-blue darken-3');
@@ -167,7 +202,7 @@ export default {
       },
       start_20() {
           let self_20 = this;
-          this.timerObj_20 = setInterval(function() {self_20.count_20()}, 1000)
+          this.timerObj_20 = setInterval(function() {self_20.count_20()}, 1000);
           this.timerOn_20 = true;
       },
       stop_20() {
@@ -175,7 +210,45 @@ export default {
           this.timerOn_20 = false;
       },
       complete_20(){
-          clearInterval(this.timerObj_20)
+          clearInterval(this.timerObj_20);
+          this.min_20 = 20;
+          this.timerOn_20 = false;
+      },
+    　
+    //カスタム
+　　　count_custom(){
+          if (this.sec_custom <= 0 && this.min_custom <=0 && this.hour_custom >= 1){
+              this.hour_custom --;
+              this.min_custom = 59;
+              this.sec_custom = 59;
+          }
+          else if (this.sec_custom <= 0 && this.min_custom >=1 && this.hour_custom >= 0){
+              this.min_custom --;
+              this.sec_custom = 59;
+          }
+          else if (this.sec_custom <= 0 && this.min_custom <=0 && this.hour_custom <=0){
+              this.complete_custom();
+          }
+          else {
+              this.sec_custom --;
+          }
+      },
+      start_custom() {
+          let self_custom = this;
+          this.timerObj_custom= setInterval(function() {self_custom.count_custom()}, 1000);
+          this.timerOn_custom = true;
+          this.state_custom = 'on';
+      },
+      stop_custom() {
+          clearInterval(this.timerObj_custom);
+          this.timerOn_custom = false;
+      },
+      complete_custom(){
+          clearInterval(this.timerObj_custom);
+          this.timerOn_custom = false;
+      },
+      mouseover(){
+          this.state_custom = 'off';
       },
   },
   computed: {
@@ -208,7 +281,21 @@ export default {
           })
           return timeStrings_20[0] + ":" + timeStrings_20[1]
       },
-      
+      customTime(){
+          let timeStrings_custom = [
+              this.hour_custom.toString(),
+              this.min_custom.toString(),
+              this.sec_custom.toString(),
+          ].map(function(str){
+              if (str.length < 2){
+                  return "0" + str
+              }
+              else {
+                  return str
+              }
+          })
+          return timeStrings_custom[0] + ":" + timeStrings_custom[1] + ":" + timeStrings_custom[2]
+      },
   }
 }
 </script>
