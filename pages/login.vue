@@ -55,7 +55,6 @@
 <script>
 import myHeader from "~/layouts/loginheader.vue";
 import myFooter from "~/layouts/loginfooter.vue";
-
 export default {
   components: {
     myHeader,
@@ -68,23 +67,10 @@ export default {
   }),
   methods: {
     login() {
-      axios
-        .post(
-          "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword",
-          {
-            email: this.email,
-            password: this.password,
-            returnSecureToken: true
-          },
-          {
-            params: {
-              key: process.env.apiKey
-            }
-          }
-        )
-        .then(responce => {
-          console.log(responce);
-        });
+      this.$store.dispatch("login", {
+        email: this.email,
+        password: this.password
+      });
     }
   }
 };
