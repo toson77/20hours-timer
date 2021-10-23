@@ -84,11 +84,12 @@ export default {
   },
   methods: {
     async register() {
+      const datetime = new Date();
       await this.$store.dispatch("register", {
         email: this.email,
         password: this.password
       });
-      axios
+      await axios
         .post(
           `https://firestore.googleapis.com/v1/projects/hours-timer/databases/(default)/documents/users`,
           {
@@ -98,6 +99,105 @@ export default {
               },
               username: {
                 stringValue: ""
+              },
+              create_at: {
+                timestampValue: datetime.toISOString()
+              },
+              update_at: {
+                timestampValue: datetime.toISOString()
+              }
+            }
+          },
+          {
+            params: {
+              documentId: this.uid
+            },
+            headers: {
+              Authorization: `Bearer ${this.idToken}`
+            }
+          }
+        )
+        .then(responce => {
+          console.log(responce);
+        });
+      await axios
+        .post(
+          `https://firestore.googleapis.com/v1/projects/hours-timer/databases/(default)/documents/users/${this.uid}/skills`,
+          {
+            fields: {
+              name: {
+                stringValue: ""
+              },
+              timerremaining: {
+                stringValue: ""
+              },
+              create_at: {
+                timestampValue: datetime.toISOString()
+              },
+              update_at: {
+                timestampValue: datetime.toISOString()
+              }
+            }
+          },
+          {
+            params: {
+              documentId: this.uid
+            },
+            headers: {
+              Authorization: `Bearer ${this.idToken}`
+            }
+          }
+        )
+        .then(responce => {
+          console.log(responce);
+        });
+      await axios
+        .post(
+          `https://firestore.googleapis.com/v1/projects/hours-timer/databases/(default)/documents/users/${this.uid}/skills/${this.uid}/histories`,
+          {
+            fields: {
+              start: {
+                stringValue: ""
+              },
+              end: {
+                stringValue: ""
+              },
+              create_at: {
+                timestampValue: datetime.toISOString()
+              },
+              update_at: {
+                timestampValue: datetime.toISOString()
+              }
+            }
+          },
+          {
+            params: {
+              documentId: this.uid
+            },
+            headers: {
+              Authorization: `Bearer ${this.idToken}`
+            }
+          }
+        )
+        .then(responce => {
+          console.log(responce);
+        });
+      await axios
+        .post(
+          `https://firestore.googleapis.com/v1/projects/hours-timer/databases/(default)/documents/users/${this.uid}/skills/${this.uid}/tasks`,
+          {
+            fields: {
+              name: {
+                stringValue: ""
+              },
+              checkbox: {
+                booleanValue: false
+              },
+              create_at: {
+                timestampValue: datetime.toISOString()
+              },
+              update_at: {
+                timestampValue: datetime.toISOString()
               }
             }
           },
