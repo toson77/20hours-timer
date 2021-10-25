@@ -55,6 +55,7 @@
 <script>
 import myHeader from "~/layouts/loginheader.vue";
 import myFooter from "~/layouts/loginfooter.vue";
+import axios from "axios";
 export default {
   components: {
     myHeader,
@@ -65,12 +66,24 @@ export default {
     email: "",
     password: ""
   }),
+  computed: {
+    idToken() {
+      return this.$store.getters.idToken;
+    },
+    uid() {
+      return this.$store.getters.uid;
+    }
+  },
   methods: {
-    login() {
-      this.$store.dispatch("login", {
+    async login() {
+      await this.$store.dispatch("login", {
         email: this.email,
         password: this.password
       });
+      await axios.post(
+        `https://firestore.googleapis.com/v1/projects/hours-timer/databases/(default)/documents/users`
+      );
+      this.$router.push({ name: "index" });
     }
   }
 };
