@@ -54,7 +54,7 @@
 
 <script>
 import myHeader from "~/layouts/loginheader.vue";
-import myFooter from "~/layouts/loginfooter.vue";
+import myFooter from "~/layouts/footer.vue";
 import axios from "axios";
 export default {
   components: {

@@ -30,6 +30,7 @@
               outlined
             />
             <v-text-field
+              :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
               label="パスワードを入力"
               placeholder="8文字以上"
               v-model.trim="password"
@@ -50,7 +51,6 @@
               登録する
             </v-btn>
             <br>
-            <v-btn @click="test()"></v-btn>
           </v-form>
         </v-card>
       </v-row>
@@ -61,7 +61,7 @@
 
 <script>
 import myHeader from "~/layouts/loginheader.vue";
-import myFooter from "~/layouts/loginfooter.vue";
+import myFooter from "~/layouts/footer.vue";
 import axios from "axios";
 export default {
   components: {
