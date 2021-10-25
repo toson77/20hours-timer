@@ -72,5 +72,9 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
+  },
+  //.env
+  env: {
+    apiKey: process.env.VUE_APP_FIREBASE_AUTH_KEY,
   }
 }
