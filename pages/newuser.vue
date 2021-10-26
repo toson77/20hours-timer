@@ -141,6 +141,9 @@ export default {
                   }
                 }
               },
+              isdone: {
+                booleanValue: false
+              },
               create_at: {
                 timestampValue: datetime.toISOString()
               },
