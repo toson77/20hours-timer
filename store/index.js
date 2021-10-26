@@ -1,12 +1,19 @@
 import axios from "axios";
+import Vue from "vue";
 export const state = () => ({
   idToken: null,
-  uid: null
+  uid: null,
+  skills: [],
+  tasks: [],
+  skillsIndex: 0,
 })
 
 export const getters = {
   idToken: state => state.idToken,
-  uid: state => state.uid
+  uid: state => state.uid,
+  skills: state => state.skills,
+  tasks: state => state.tasks,
+  skillsIndex: state => state.skillsIndex,
 }
 
 export const mutations = {
@@ -15,6 +22,21 @@ export const mutations = {
   },
   updateUid (state, uid) {
     state.uid = uid;
+  },
+  updateSkills (state, skills) {
+    state.skills.splice(0, state.skills.length);
+    skills.forEach((value, index) => {
+      state.skills.push(value);
+    });
+  },
+  updateTasks (state, tasks) {
+    state.tasks.splice(0, state.tasks.length);
+    tasks.forEach((value, index) => {
+      state.tasks.push(value);
+    })
+  },
+  updateSkillsIndex (state, index) {
+    state.skillsIndex = index;
   }
 }
 
@@ -61,5 +83,27 @@ export const actions = {
         console.log(responce);
       });
   },
+  actionSetSkills ({ commit }, dataList) {
+    commit('updateSkills', dataList);
+  },
+  actionSetTasks ({ commit }, dataList) {
+    commit('updateTasks', dataList);
+  },
+  async changeSkill ({ commit }, authData) {
+    //get tasks
+    await axios
+      .get(
+        `https://firestore.googleapis.com/v1/${authData.apiPath}/tasks`,
+        {
+          headers: {
+            Authorization: `Bearer ${authData.idToken}`
+          }
+        }
+      )
+      .then(responce => {
+        commit("updateTasks", responce.data.documents);
+      });
+    commit("updateSkillsIndex", authData.skillsIndex);
+  }
 
 }

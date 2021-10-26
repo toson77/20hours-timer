@@ -63,8 +63,8 @@ export default {
   },
   data: () => ({
     appName: "20時間タイマー",
-    email: "",
-    password: ""
+    email: "test2@test.com",
+    password: "test1234"
   }),
   computed: {
     idToken() {
@@ -80,9 +80,36 @@ export default {
         email: this.email,
         password: this.password
       });
-      await axios.post(
-        `https://firestore.googleapis.com/v1/projects/hours-timer/databases/(default)/documents/users`
-      );
+      // get skills
+      await axios
+        .get(
+          `https://firestore.googleapis.com/v1/projects/hours-timer/databases/(default)/documents/users/${this.uid}/skills`,
+          {
+            headers: {
+              Authorization: `Bearer ${this.idToken}`
+            }
+          }
+        )
+        .then(responce => {
+          console.log(responce);
+          this.$store.dispatch("actionSetSkills", responce.data.documents);
+          console.log(this.$store.getters.skills);
+        });
+      // get tasks of skill[0]
+      await axios
+        .get(
+          `https://firestore.googleapis.com/v1/${this.$store.getters.skills[0].name}/tasks`,
+          {
+            headers: {
+              Authorization: `Bearer ${this.idToken}`
+            }
+          }
+        )
+        .then(responce => {
+          console.log(responce);
+          this.$store.dispatch("actionSetTasks", responce.data.documents);
+          console.log(this.$store.getters.tasks);
+        });
       this.$router.push({ name: "index" });
     }
   }

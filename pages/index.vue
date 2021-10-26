@@ -37,8 +37,7 @@ export default {
     idToken() {
       return this.$store.getters.idToken;
     }
-  },
-  created() {}
+  }
 };
 </script>
 
