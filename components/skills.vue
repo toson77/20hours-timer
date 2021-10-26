@@ -49,28 +49,33 @@
             class="white"
           >
             <v-row>
-              <v-col cols="1">
-              </v-col>
-              <v-col cols="3">
-                <strong
-                  v-text="skill.text"
-                  slot="label"
-                  :class="skill.done && 'grey--text' || 'text--primary'"
-                ></strong>
-              </v-col>
-              <v-col>
-                <v-progress-linear
-                  :value="skill.power"
-                  color="teal accent-4"
-                  height="25"
-                >
+              <v-btn
+                block
+                text
+              >
+                <v-col cols="1">
+                </v-col>
+                <v-col cols="3">
+                  <strong
+                    v-text="skill.text"
+                    slot="label"
+                    :class="skill.done && 'grey--text' || 'text--primary'"
+                  ></strong>
+                </v-col>
+                <v-col>
+                  <v-progress-linear
+                    :value="skill.power"
+                    color="teal accent-4"
+                    height="25"
+                  >
 
-                  <!-- <template v-slot:default="{ value }"> -->
-                  <strong>{{ Math.ceil(skill.power) }}%</strong>
-                  <!-- </template> -->
-                </v-progress-linear>
-              </v-col>
-              <v-col cols="1"></v-col>
+                    <!-- <template v-slot:default="{ value }"> -->
+                    <strong>{{ Math.ceil(skill.power) }}%</strong>
+                    <!-- </template> -->
+                  </v-progress-linear>
+                </v-col>
+                <v-col cols="1"></v-col>
+              </v-btn>
             </v-row>
 
           </v-list-item>
