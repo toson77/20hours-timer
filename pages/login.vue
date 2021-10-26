@@ -94,9 +94,6 @@ export default {
           console.log(responce);
           this.$store.dispatch("actionSetSkills", responce.data.documents);
           console.log(this.$store.getters.skills);
-          console.log(
-            this.$store.getters.skills[0].fields.timerremaining.mapValue.fields
-          );
         });
       // get tasks of skill[0]
       await axios
