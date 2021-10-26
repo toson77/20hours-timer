@@ -60,14 +60,14 @@
               </v-col>
               <v-col>
                 <v-progress-linear
-                  v-model="skill.power"
+                  :value="skill.power"
                   color="teal accent-4"
                   height="25"
                 >
 
-                  <template v-slot:default="{ value }">
-                    <strong>{{ Math.ceil(value) }}%</strong>
-                  </template>
+                  <!-- <template v-slot:default="{ value }"> -->
+                  <strong>{{ Math.ceil(skill.power) }}%</strong>
+                  <!-- </template> -->
                 </v-progress-linear>
               </v-col>
               <v-col cols="1"></v-col>
