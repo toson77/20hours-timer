@@ -129,7 +129,7 @@ export default {
                 stringValue: ""
               },
               timerremaining: {
-                stringValue: ""
+                stringValue: "200000"
               },
               create_at: {
                 timestampValue: datetime.toISOString()

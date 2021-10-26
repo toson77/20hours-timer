@@ -1,12 +1,16 @@
 import axios from "axios";
 export const state = () => ({
   idToken: null,
-  uid: null
+  uid: null,
+  skills: [],
+  tasks: [],
 })
 
 export const getters = {
   idToken: state => state.idToken,
-  uid: state => state.uid
+  uid: state => state.uid,
+  skills: state => state.skills,
+  tasks: state => state.tasks,
 }
 
 export const mutations = {
@@ -15,6 +19,12 @@ export const mutations = {
   },
   updateUid (state, uid) {
     state.uid = uid;
+  },
+  updateSkills (state, skills) {
+    state.skills = skills;
+  },
+  updateTasks (state, tasks) {
+    state.tasks = tasks;
   }
 }
 
