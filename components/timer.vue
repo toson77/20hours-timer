@@ -277,6 +277,15 @@ export default {
     },
     mouseover() {
       this.state_custom = "off";
+    },
+    //change skills and change timer
+    initTimer() {
+      const timerMap = this.$store.getters.skills[
+        this.$store.getters.skillsIndex
+      ].fields.timerremaining.mapValue.fields;
+      this.hour_t = timerMap.hour.integerValue;
+      this.min_t = timerMap.min.integerValue;
+      this.sec = timerMap.sec.integerValue;
     }
   },
   computed: {
@@ -328,12 +337,18 @@ export default {
     }
   },
   created() {
-    // timer setting
+    // timer first skill[0]
     const timerMap = this.$store.getters.skills[0].fields.timerremaining
       .mapValue.fields;
     this.hour_t = timerMap.hour.integerValue;
     this.min_t = timerMap.min.integerValue;
     this.sec = timerMap.sec.integerValue;
+  },
+  //watch change skills
+  watch: {
+    "$store.state.skillsIndex": function() {
+      this.initTimer();
+    }
   }
 };
 </script>

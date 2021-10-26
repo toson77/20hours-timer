@@ -5,6 +5,7 @@ export const state = () => ({
   uid: null,
   skills: [],
   tasks: [],
+  skillsIndex: 0,
 })
 
 export const getters = {
@@ -12,6 +13,7 @@ export const getters = {
   uid: state => state.uid,
   skills: state => state.skills,
   tasks: state => state.tasks,
+  skillsIndex: state => state.skillsIndex,
 }
 
 export const mutations = {
@@ -32,6 +34,9 @@ export const mutations = {
     tasks.forEach((value, index) => {
       state.tasks.push(value);
     })
+  },
+  updateSkillsIndex (state, index) {
+    state.skillsIndex = index;
   }
 }
 
@@ -98,6 +103,7 @@ export const actions = {
       .then(responce => {
         commit("updateTasks", responce.data.documents);
       });
+    commit("updateSkillsIndex", authData.skillsIndex);
   }
 
 }

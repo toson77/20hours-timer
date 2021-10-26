@@ -144,7 +144,8 @@ export default {
       const index = this.skills.indexOf(skill);
       await this.$store.dispatch("changeSkill", {
         apiPath: skill.apiPath,
-        idToken: this.$store.getters.idToken
+        idToken: this.$store.getters.idToken,
+        skillsIndex: index
       });
     }
   },
