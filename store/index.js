@@ -1,4 +1,5 @@
 import axios from "axios";
+import Vue from "vue";
 export const state = () => ({
   idToken: null,
   uid: null,
@@ -21,10 +22,14 @@ export const mutations = {
     state.uid = uid;
   },
   updateSkills (state, skills) {
-    state.skills = skills;
+    skills.forEach((value, index) => {
+      Vue.set(state.skills, index, value);
+    });
   },
   updateTasks (state, tasks) {
-    state.tasks = tasks;
+    tasks.forEach((value, index) => {
+      Vue.set(state.tasks, index, value);
+    })
   }
 }
 
@@ -71,5 +76,11 @@ export const actions = {
         console.log(responce);
       });
   },
+  actionSetSkills ({ commit }, dataList) {
+    commit('updateSkills', dataList);
+  },
+  actionSetTasks ({ commit }, dataList) {
+    commit('updateTasks', dataList);
+  }
 
 }

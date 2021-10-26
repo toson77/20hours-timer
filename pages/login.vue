@@ -92,11 +92,16 @@ export default {
         )
         .then(responce => {
           console.log(responce);
+          this.$store.dispatch("actionSetSkills", responce.data.documents);
+          console.log(this.$store.getters.skills);
+          console.log(
+            this.$store.getters.skills[0].fields.timerremaining.mapValue.fields
+          );
         });
       // get tasks of skill[0]
       await axios
         .get(
-          `https://firestore.googleapis.com/v1/projects/hours-timer/databases/(default)/documents/users/${this.uid}/skills/${this.uid}/tasks`,
+          `https://firestore.googleapis.com/v1/${this.$store.getters.skills[0].name}/tasks`,
           {
             headers: {
               Authorization: `Bearer ${this.idToken}`
@@ -105,6 +110,8 @@ export default {
         )
         .then(responce => {
           console.log(responce);
+          this.$store.dispatch("actionSetTasks", responce.data.documents);
+          console.log(this.$store.getters.tasks);
         });
       this.$router.push({ name: "index" });
     }

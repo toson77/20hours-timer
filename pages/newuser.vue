@@ -129,7 +129,17 @@ export default {
                 stringValue: ""
               },
               timerremaining: {
-                stringValue: "200000"
+                mapValue: {
+                  hour: {
+                    integerValue: "20"
+                  },
+                  min: {
+                    integerValue: "0"
+                  },
+                  sec: {
+                    integerValue: "0"
+                  }
+                }
               },
               create_at: {
                 timestampValue: datetime.toISOString()
