@@ -139,17 +139,26 @@ export default {
     deleteTasks(task) {
       let index = this.tasks.indexOf(task);
       this.tasks.splice(index, 1);
+    },
+    initTasks() {
+      this.tasks.splice(0, this.tasks.length);
+      const gettedTasks = this.$store.getters.tasks;
+      gettedTasks.forEach((value, index) => {
+        const elementMap = {
+          done: value.fields.checkbox.booleanValue,
+          text: value.fields.name.stringValue
+        };
+        this.$set(this.tasks, index, elementMap);
+      });
     }
   },
   created() {
-    const gettedTasks = this.$store.getters.tasks;
-    gettedTasks.forEach((value, index) => {
-      const elementMap = {
-        done: value.fields.checkbox.booleanValue,
-        text: value.fields.name.stringValue
-      };
-      this.$set(this.tasks, index, elementMap);
-    });
+    this.initTasks();
+  },
+  watch: {
+    "$store.state.tasks": function() {
+      this.initTasks();
+    }
   }
 };
 </script>

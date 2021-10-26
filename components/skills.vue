@@ -52,6 +52,7 @@
               <v-btn
                 block
                 text
+                @click="changeSkill(skill)"
               >
                 <v-col cols="1">
                 </v-col>
@@ -131,13 +132,20 @@ export default {
       this.skills.push({
         power: 0,
         done: false,
-        text: this.skill
+        text: this.skill,
+        apiPath: ""
       });
-
       this.skill = null;
     },
     timeToRatio(hour) {
       return Math.round(100 - (hour / 20) * 100);
+    },
+    async changeSkill(skill) {
+      const index = this.skills.indexOf(skill);
+      await this.$store.dispatch("changeSkill", {
+        apiPath: skill.apiPath,
+        idToken: this.$store.getters.idToken
+      });
     }
   },
   created() {
@@ -148,7 +156,8 @@ export default {
           value.fields.timerremaining.mapValue.fields.hour.integerValue
         ),
         done: value.fields.isdone.booleanValue,
-        text: value.fields.name.stringValue
+        text: value.fields.name.stringValue,
+        apiPath: value.name
       };
       this.$set(this.skills, index, elementMap);
     });

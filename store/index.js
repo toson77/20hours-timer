@@ -22,13 +22,15 @@ export const mutations = {
     state.uid = uid;
   },
   updateSkills (state, skills) {
+    state.skills.splice(0, state.skills.length);
     skills.forEach((value, index) => {
-      Vue.set(state.skills, index, value);
+      state.skills.push(value);
     });
   },
   updateTasks (state, tasks) {
+    state.tasks.splice(0, state.tasks.length);
     tasks.forEach((value, index) => {
-      Vue.set(state.tasks, index, value);
+      state.tasks.push(value);
     })
   }
 }
@@ -81,6 +83,21 @@ export const actions = {
   },
   actionSetTasks ({ commit }, dataList) {
     commit('updateTasks', dataList);
+  },
+  async changeSkill ({ commit }, authData) {
+    //get tasks
+    await axios
+      .get(
+        `https://firestore.googleapis.com/v1/${authData.apiPath}/tasks`,
+        {
+          headers: {
+            Authorization: `Bearer ${authData.idToken}`
+          }
+        }
+      )
+      .then(responce => {
+        commit("updateTasks", responce.data.documents);
+      });
   }
 
 }
