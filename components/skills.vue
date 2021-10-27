@@ -106,6 +106,7 @@
 
 
 <script>
+import axios from "axios";
 export default {
   data: () => ({
     skills: [],
@@ -128,11 +129,19 @@ export default {
     },
     isTimerOn() {
       return this.$store.getters.isTimerOn;
+    },
+    uid() {
+      return this.$store.getters.uid;
+    },
+    idToken() {
+      return this.$store.getters.idToken;
     }
   },
 
   methods: {
-    create() {
+    async create() {
+      const skillname = this.skill;
+      const datetime = new Date();
       this.skills.push({
         power: 0,
         done: false,
@@ -140,6 +149,74 @@ export default {
         apiPath: ""
       });
       this.skill = null;
+
+      await axios
+        .get(`/postskills/${this.uid}/skills`, {
+          headers: {
+            Authorization: `Bearer ${this.idToken}`
+          }
+        })
+        .then(responce => {
+          console.log(responce);
+        });
+      //rest post (create document)
+      await axios
+        .post(
+          `/postskills/${this.uid}/skills`,
+          {
+            fields: {
+              name: {
+                stringValue: skillname
+              },
+              timerremaining: {
+                mapValue: {
+                  fields: {
+                    hour: {
+                      integerValue: "20"
+                    },
+                    min: {
+                      integerValue: "0"
+                    },
+                    sec: {
+                      integerValue: "0"
+                    }
+                  }
+                }
+              },
+              isdone: {
+                booleanValue: false
+              },
+              create_at: {
+                timestampValue: datetime.toISOString()
+              },
+              update_at: {
+                timestampValue: datetime.toISOString()
+              }
+            }
+          },
+          {
+            headers: {
+              Authhorization: `Bearer ${this.idToken}`
+            }
+          }
+        )
+        .then(responce => {
+          console.log(responce);
+        });
+      //update vuex
+      await axios
+        .get(
+          `https://firestore.googleapis.com/v1/projects/hours-timer/databases/(default)/documents/users/${this.uid}/skills`,
+          {
+            headers: {
+              Authorization: `Bearer ${this.idToken}`
+            }
+          }
+        )
+        .then(responce => {
+          console.log(responce);
+          this.$store.dispatch("actionSetSkills", responce.data.documents);
+        });
     },
     timeToRatio(hour) {
       return Math.round(100 - (hour / 20) * 100);

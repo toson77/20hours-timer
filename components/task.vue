@@ -145,7 +145,9 @@ export default {
       const datetime = new Date();
       await axios
         .post(
-          `https://firestore.googleapis.com/v1/projects/hours-timer/databases/(default)/documents/users/${this.uid}/skills/${this.uid}/tasks`,
+          `https://firestore.googleapis.com/v1/${
+            this.$store.getters.skills[this.$store.getters.skillsIndex].name
+          }/tasks`,
           {
             fields: {
               name: {
@@ -174,7 +176,9 @@ export default {
       // update vuex
       await axios
         .get(
-          `https://firestore.googleapis.com/v1/projects/hours-timer/databases/(default)/documents/users/${this.uid}/skills/${this.uid}/tasks`,
+          `https://firestore.googleapis.com/v1/${
+            this.$store.getters.skills[this.$store.getters.skillsIndex].name
+          }/tasks`,
           {
             headers: {
               Authorization: `Bearer ${this.$store.getters.idToken}`
