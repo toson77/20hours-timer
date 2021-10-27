@@ -290,11 +290,11 @@ export default {
   },
   computed: {
     formatTime() {
-      let timeStrings = [
+      const timeStrings = [
         this.hour_t.toString(),
         this.min_t.toString(),
         this.sec.toString()
-      ].map(function(str) {
+      ].map(str => {
         if (str.length < 2) {
           return "0" + str;
         } else {
@@ -304,23 +304,24 @@ export default {
       return timeStrings[0] + ":" + timeStrings[1] + ":" + timeStrings[2];
     },
     minTime() {
-      let timeStrings_20 = [this.min_20.toString(), this.sec_20.toString()].map(
-        function(str) {
-          if (str.length < 2) {
-            return "0" + str;
-          } else {
-            return str;
-          }
+      const timeStrings_20 = [
+        this.min_20.toString(),
+        this.sec_20.toString()
+      ].map(str => {
+        if (str.length < 2) {
+          return "0" + str;
+        } else {
+          return str;
         }
-      );
+      });
       return timeStrings_20[0] + ":" + timeStrings_20[1];
     },
     customTime() {
-      let timeStrings_custom = [
+      const timeStrings_custom = [
         this.hour_custom.toString(),
         this.min_custom.toString(),
         this.sec_custom.toString()
-      ].map(function(str) {
+      ].map(str => {
         if (str.length < 2) {
           return "0" + str;
         } else {
@@ -344,7 +345,7 @@ export default {
     this.min_t = timerMap.min.integerValue;
     this.sec = timerMap.sec.integerValue;
   },
-  //watch change skills
+  //  watch change skills
   watch: {
     "$store.state.skillsIndex": function() {
       this.initTimer();
