@@ -37,6 +37,9 @@ export const mutations = {
   },
   updateSkillsIndex (state, index) {
     state.skillsIndex = index;
+  },
+  updateTimer (state, timer) {
+    Vue.set(state.skills[timer.index].fields, "timerremaining", timer.timerremaining);
   }
 }
 
@@ -104,6 +107,25 @@ export const actions = {
         commit("updateTasks", responce.data.documents);
       });
     commit("updateSkillsIndex", authData.skillsIndex);
+  },
+  async putTimer ({ commit }, authData) {
+    // update state timer
+    await commit("updateTimer", authData);
+    // patch
+    await axios.patch(`https://firestore.googleapis.com/v1/${authData.apiPath}` + "?updateMask.fieldPaths=timerremaining",
+      {
+        fields: {
+          timerremaining: authData.timerremaining,
+        }
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${authData.idToken}`
+        },
+      }
+    ).then(responce => {
+      console.log(responce);
+    })
   }
 
 }

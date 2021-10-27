@@ -200,9 +200,33 @@ export default {
     stop() {
       clearInterval(this.timerObj);
       this.timerOn = false;
+      this.restputTimer();
     },
     complete() {
       clearInterval(this.timerObj);
+    },
+    async restputTimer() {
+      await this.$store.dispatch("putTimer", {
+        index: this.$store.getters.skillsIndex,
+        idToken: this.$store.getters.idToken,
+        apiPath: this.$store.getters.skills[this.$store.getters.skillsIndex]
+          .name,
+        timerremaining: {
+          mapValue: {
+            fields: {
+              hour: {
+                integerValue: this.hour_t
+              },
+              min: {
+                integerValue: this.min_t
+              },
+              sec: {
+                integerValue: this.sec
+              }
+            }
+          }
+        }
+      });
     },
 
     //20min timer
@@ -341,6 +365,7 @@ export default {
     // timer first skill[0]
     const timerMap = this.$store.getters.skills[0].fields.timerremaining
       .mapValue.fields;
+    console.log(timerMap);
     this.hour_t = timerMap.hour.integerValue;
     this.min_t = timerMap.min.integerValue;
     this.sec = timerMap.sec.integerValue;
