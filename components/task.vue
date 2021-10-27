@@ -52,6 +52,7 @@
 
             <v-list-item-action>
               <v-checkbox
+                @change="patchCheckbox(task)"
                 v-model="task.done"
                 color="info darken-3"
               >
@@ -107,6 +108,7 @@
 
 
 <script>
+import axios from "axios";
 export default {
   data: () => ({
     tasks: [],
@@ -150,6 +152,30 @@ export default {
         };
         this.$set(this.tasks, index, elementMap);
       });
+    },
+    async patchCheckbox(task) {
+      const index = this.tasks.indexOf(task);
+      // patch
+      await axios
+        .patch(
+          `https://firestore.googleapis.com/v1/${this.$store.getters.tasks[index].name}` +
+            "?updateMask.fieldPaths=checkbox",
+          {
+            fields: {
+              checkbox: {
+                booleanValue: task.done
+              }
+            }
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${this.$store.getters.idToken}`
+            }
+          }
+        )
+        .then(responce => {
+          console.log(responce);
+        });
     }
   },
   created() {
