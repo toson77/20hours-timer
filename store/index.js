@@ -6,6 +6,7 @@ export const state = () => ({
   skills: [],
   tasks: [],
   skillsIndex: 0,
+  isTimerOn: false,
 })
 
 export const getters = {
@@ -14,6 +15,7 @@ export const getters = {
   skills: state => state.skills,
   tasks: state => state.tasks,
   skillsIndex: state => state.skillsIndex,
+  isTimerOn: state => state.isTimerOn,
 }
 
 export const mutations = {
@@ -40,6 +42,9 @@ export const mutations = {
   },
   updateTimer (state, timer) {
     Vue.set(state.skills[timer.index].fields, "timerremaining", timer.timerremaining);
+  },
+  updateIsTimerOn (state, isTimerOn) {
+    state.isTimerOn = isTimerOn;
   }
 }
 

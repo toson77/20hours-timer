@@ -52,6 +52,7 @@
               <v-btn
                 block
                 text
+                :disabled="isTimerOn"
                 @click="changeSkill(skill)"
               >
                 <v-col cols="1">
@@ -124,6 +125,9 @@ export default {
     },
     remainingskills() {
       return this.skills.length - this.completedskills;
+    },
+    isTimerOn() {
+      return this.$store.getters.isTimerOn;
     }
   },
 

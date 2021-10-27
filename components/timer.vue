@@ -196,10 +196,12 @@ export default {
         self.count();
       }, 1000);
       this.timerOn = true;
+      this.$store.commit("updateIsTimerOn", this.timerOn);
     },
     stop() {
       clearInterval(this.timerObj);
       this.timerOn = false;
+      this.$store.commit("updateIsTimerOn", this.timerOn);
       this.restputTimer();
     },
     complete() {
