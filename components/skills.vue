@@ -90,14 +90,13 @@
       v-model="skill"
       label="Add skill"
       solo
-      @keydown.enter="create"
+      @keydown.enter="updateDb2();create()"
     >
 
       <v-fade-transition slot="append">
         <i
           class="mdi mdi-plus"
           v-if="skill"
-          @click="create"
         />
       </v-fade-transition>
     </v-text-field>
@@ -140,8 +139,6 @@ export default {
 
   methods: {
     async create() {
-      const skillname = this.skill;
-      const datetime = new Date();
       this.skills.push({
         power: 0,
         done: false,
@@ -149,20 +146,76 @@ export default {
         apiPath: ""
       });
       this.skill = null;
-
-      await axios
-        .get(`/postskills/${this.uid}/skills`, {
-          headers: {
-            Authorization: `Bearer ${this.idToken}`
-          }
-        })
-        .then(responce => {
-          console.log(responce);
-        });
+    },
+    async updateDb() {
+      const skillname = this.skill;
+      const datetime = new Date();
       //rest post (create document)
       await axios
         .post(
           `/postskills/${this.uid}/skills`,
+          {
+            fields: {
+              name: {
+                stringValue: skillname
+              },
+              timerremaining: {
+                mapValue: {
+                  fields: {
+                    hour: {
+                      integerValue: "20"
+                    },
+                    min: {
+                      integerValue: "0"
+                    },
+                    sec: {
+                      integerValue: "0"
+                    }
+                  }
+                }
+              },
+              isdone: {
+                booleanValue: false
+              },
+              create_at: {
+                timestampValue: datetime.toISOString()
+              },
+              update_at: {
+                timestampValue: datetime.toISOString()
+              }
+            }
+          },
+          {
+            headers: {
+              Authhorization: `Bearer ${this.idToken}`
+            }
+          }
+        )
+        .then(responce => {
+          console.log(responce);
+        });
+      //update vuex
+      await axios
+        .get(
+          `https://firestore.googleapis.com/v1/projects/hours-timer/databases/(default)/documents/users/${this.uid}/skills`,
+          {
+            headers: {
+              Authorization: `Bearer ${this.idToken}`
+            }
+          }
+        )
+        .then(responce => {
+          console.log(responce);
+          this.$store.dispatch("actionSetSkills", responce.data.documents);
+        });
+    },
+    async updateDb2() {
+      const skillname = this.skill;
+      const datetime = new Date();
+      //rest post (create document)
+      await axios
+        .post(
+          `https://firestore.googleapis.com/v1/projects/hours-timer/databases/(default)/documents/users/${this.uid}/skills`,
           {
             fields: {
               name: {

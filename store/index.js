@@ -110,6 +110,7 @@ export const actions = {
       )
       .then(responce => {
         commit("updateTasks", responce.data.documents);
+        console.log(responce);
       });
     commit("updateSkillsIndex", authData.skillsIndex);
   },
