@@ -1,3 +1,4 @@
+import { mdiRouter } from "@mdi/js";
 import axios from "axios";
 import Vue from "vue";
 export const state = () => ({
@@ -86,6 +87,10 @@ export const actions = {
         }, responce.data.expiresIn * 1000)
         console.log(responce);
       });
+  },
+  logout ({ commit }) {
+    commit('updateIdToken', null);
+    this.$router.push('/login');
   },
   register ({ commit }, authData) {
     return axios

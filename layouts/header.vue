@@ -4,25 +4,19 @@
     height="50px"
   >
     <v-spacer />
-    <v-toolbar-title
-      class="text-h6 white--text"
-      
-    >
+    <v-toolbar-title class="text-h6 white--text">
       {{ appName }}
     </v-toolbar-title>
     <v-spacer />
-    
+
     <v-btn
       height="30px"
       width="70px"
       color="rgba(255, 255, 255, 0.1)"
-    ></v-btn>
-      <v-btn
-      height="30px"
-      width="70px"
-      color="rgba(255, 255, 255, 0.1)"
-    ></v-btn>
-    
+      @click="logout()"
+      class="white--text"
+    >Logout</v-btn>
+
     <v-spacer />
   </v-app-bar>
 </template>
@@ -31,6 +25,11 @@
 export default {
   data: () => ({
     appName: "20時間タイマー"
-  })
-}
+  }),
+  methods: {
+    logout() {
+      this.$store.dispatch("logout");
+    }
+  }
+};
 </script>

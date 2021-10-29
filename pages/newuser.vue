@@ -32,6 +32,7 @@
             <v-text-field
               :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
               label="パスワードを入力"
+              :type="'password'"
               placeholder="8文字以上"
               v-model.trim="password"
               outlined
@@ -39,6 +40,7 @@
             <v-text-field
               label="パスワードを再入力"
               placeholder="8文字以上"
+              :type="'password'"
               v-model.trim="passwordCheckVal"
               outlined
             />
