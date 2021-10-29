@@ -90,7 +90,7 @@
       v-model="skill"
       label="Add skill"
       solo
-      @keydown.enter="updateDb2();create()"
+      @keydown.enter="updateDb();create()"
     >
 
       <v-fade-transition slot="append">
@@ -109,7 +109,7 @@ import axios from "axios";
 export default {
   data: () => ({
     skills: [],
-    skill: null,
+    skill: "",
     change: "light-blue darken-2"
   }),
   computed: {
@@ -153,7 +153,7 @@ export default {
       //rest post (create document)
       await axios
         .post(
-          `/postskills/${this.uid}/skills`,
+          `https://firestore.googleapis.com/v1/projects/hours-timer/databases/(default)/documents/users/${this.uid}/skills`,
           {
             fields: {
               name: {
@@ -185,71 +185,9 @@ export default {
               }
             }
           },
-          {
-            headers: {
-              Authhorization: `Bearer ${this.idToken}`
-            }
-          }
-        )
-        .then(responce => {
-          console.log(responce);
-        });
-      //update vuex
-      await axios
-        .get(
-          `https://firestore.googleapis.com/v1/projects/hours-timer/databases/(default)/documents/users/${this.uid}/skills`,
           {
             headers: {
               Authorization: `Bearer ${this.idToken}`
-            }
-          }
-        )
-        .then(responce => {
-          console.log(responce);
-          this.$store.dispatch("actionSetSkills", responce.data.documents);
-        });
-    },
-    async updateDb2() {
-      const skillname = this.skill;
-      const datetime = new Date();
-      //rest post (create document)
-      await axios
-        .post(
-          `https://firestore.googleapis.com/v1/projects/hours-timer/databases/(default)/documents/users/${this.uid}/skills`,
-          {
-            fields: {
-              name: {
-                stringValue: skillname
-              },
-              timerremaining: {
-                mapValue: {
-                  fields: {
-                    hour: {
-                      integerValue: "20"
-                    },
-                    min: {
-                      integerValue: "0"
-                    },
-                    sec: {
-                      integerValue: "0"
-                    }
-                  }
-                }
-              },
-              isdone: {
-                booleanValue: false
-              },
-              create_at: {
-                timestampValue: datetime.toISOString()
-              },
-              update_at: {
-                timestampValue: datetime.toISOString()
-              }
-            }
-          },
-          {
-            headers: {
-              Authhorization: `Bearer ${this.idToken}`
             }
           }
         )
@@ -281,21 +219,29 @@ export default {
         idToken: this.$store.getters.idToken,
         skillsIndex: index
       });
+    },
+    initSkills() {
+      const gettedSkills = this.$store.getters.skills;
+      gettedSkills.forEach((value, index) => {
+        const elementMap = {
+          power: this.timeToRatio(
+            value.fields.timerremaining.mapValue.fields.hour.integerValue
+          ),
+          done: value.fields.isdone.booleanValue,
+          text: value.fields.name.stringValue,
+          apiPath: value.name
+        };
+        this.$set(this.skills, index, elementMap);
+      });
     }
   },
   created() {
-    const gettedSkills = this.$store.getters.skills;
-    gettedSkills.forEach((value, index) => {
-      const elementMap = {
-        power: this.timeToRatio(
-          value.fields.timerremaining.mapValue.fields.hour.integerValue
-        ),
-        done: value.fields.isdone.booleanValue,
-        text: value.fields.name.stringValue,
-        apiPath: value.name
-      };
-      this.$set(this.skills, index, elementMap);
-    });
+    this.initSkills();
+  },
+  watch: {
+    "$store.state.skills": function() {
+      this.initSkills();
+    }
   }
 };
 </script>
