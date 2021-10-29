@@ -130,14 +130,16 @@ export default {
               },
               timerremaining: {
                 mapValue: {
-                  hour: {
-                    integerValue: "20"
-                  },
-                  min: {
-                    integerValue: "0"
-                  },
-                  sec: {
-                    integerValue: "0"
+                  fields: {
+                    hour: {
+                      integerValue: "20"
+                    },
+                    min: {
+                      integerValue: "0"
+                    },
+                    sec: {
+                      integerValue: "0"
+                    }
                   }
                 }
               },

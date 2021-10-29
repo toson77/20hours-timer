@@ -52,6 +52,7 @@
               <v-btn
                 block
                 text
+                :disabled="isTimerOn"
                 @click="changeSkill(skill)"
               >
                 <v-col cols="1">
@@ -89,14 +90,13 @@
       v-model="skill"
       label="Add skill"
       solo
-      @keydown.enter="create"
+      @keydown.enter="updateDb();create()"
     >
 
       <v-fade-transition slot="append">
         <i
           class="mdi mdi-plus"
           v-if="skill"
-          @click="create"
         />
       </v-fade-transition>
     </v-text-field>
@@ -105,10 +105,11 @@
 
 
 <script>
+import axios from "axios";
 export default {
   data: () => ({
     skills: [],
-    skill: null,
+    skill: "",
     change: "light-blue darken-2"
   }),
   computed: {
@@ -124,11 +125,20 @@ export default {
     },
     remainingskills() {
       return this.skills.length - this.completedskills;
+    },
+    isTimerOn() {
+      return this.$store.getters.isTimerOn;
+    },
+    uid() {
+      return this.$store.getters.uid;
+    },
+    idToken() {
+      return this.$store.getters.idToken;
     }
   },
 
   methods: {
-    create() {
+    async create() {
       this.skills.push({
         power: 0,
         done: false,
@@ -136,6 +146,68 @@ export default {
         apiPath: ""
       });
       this.skill = null;
+    },
+    async updateDb() {
+      const skillname = this.skill;
+      const datetime = new Date();
+      //rest post (create document)
+      await axios
+        .post(
+          `https://firestore.googleapis.com/v1/projects/hours-timer/databases/(default)/documents/users/${this.uid}/skills`,
+          {
+            fields: {
+              name: {
+                stringValue: skillname
+              },
+              timerremaining: {
+                mapValue: {
+                  fields: {
+                    hour: {
+                      integerValue: "20"
+                    },
+                    min: {
+                      integerValue: "0"
+                    },
+                    sec: {
+                      integerValue: "0"
+                    }
+                  }
+                }
+              },
+              isdone: {
+                booleanValue: false
+              },
+              create_at: {
+                timestampValue: datetime.toISOString()
+              },
+              update_at: {
+                timestampValue: datetime.toISOString()
+              }
+            }
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${this.idToken}`
+            }
+          }
+        )
+        .then(responce => {
+          console.log(responce);
+        });
+      //update vuex
+      await axios
+        .get(
+          `https://firestore.googleapis.com/v1/projects/hours-timer/databases/(default)/documents/users/${this.uid}/skills`,
+          {
+            headers: {
+              Authorization: `Bearer ${this.idToken}`
+            }
+          }
+        )
+        .then(responce => {
+          console.log(responce);
+          this.$store.dispatch("actionSetSkills", responce.data.documents);
+        });
     },
     timeToRatio(hour) {
       return Math.round(100 - (hour / 20) * 100);
@@ -147,21 +219,29 @@ export default {
         idToken: this.$store.getters.idToken,
         skillsIndex: index
       });
+    },
+    initSkills() {
+      const gettedSkills = this.$store.getters.skills;
+      gettedSkills.forEach((value, index) => {
+        const elementMap = {
+          power: this.timeToRatio(
+            value.fields.timerremaining.mapValue.fields.hour.integerValue
+          ),
+          done: value.fields.isdone.booleanValue,
+          text: value.fields.name.stringValue,
+          apiPath: value.name
+        };
+        this.$set(this.skills, index, elementMap);
+      });
     }
   },
   created() {
-    const gettedSkills = this.$store.getters.skills;
-    gettedSkills.forEach((value, index) => {
-      const elementMap = {
-        power: this.timeToRatio(
-          value.fields.timerremaining.mapValue.fields.hour.integerValue
-        ),
-        done: value.fields.isdone.booleanValue,
-        text: value.fields.name.stringValue,
-        apiPath: value.name
-      };
-      this.$set(this.skills, index, elementMap);
-    });
+    this.initSkills();
+  },
+  watch: {
+    "$store.state.skills": function() {
+      this.initSkills();
+    }
   }
 };
 </script>

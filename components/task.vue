@@ -52,6 +52,7 @@
 
             <v-list-item-action>
               <v-checkbox
+                @change="patchCheckbox(task)"
                 v-model="task.done"
                 color="info darken-3"
               >
@@ -107,6 +108,7 @@
 
 
 <script>
+import axios from "axios";
 export default {
   data: () => ({
     tasks: [],
@@ -125,20 +127,85 @@ export default {
     },
     remainingTasks() {
       return this.tasks.length - this.completedTasks;
+    },
+    uid() {
+      return this.$store.getters.uid;
     }
   },
 
   methods: {
-    create() {
+    async create() {
+      const taskname = this.task;
       this.tasks.push({
         done: false,
         text: this.task
       });
       this.task = null;
+      //rest post (create document)
+      const datetime = new Date();
+      await axios
+        .post(
+          `https://firestore.googleapis.com/v1/${
+            this.$store.getters.skills[this.$store.getters.skillsIndex].name
+          }/tasks`,
+          {
+            fields: {
+              name: {
+                stringValue: taskname
+              },
+              checkbox: {
+                booleanValue: false
+              },
+              create_at: {
+                timestampValue: datetime.toISOString()
+              },
+              update_at: {
+                timestampValue: datetime.toISOString()
+              }
+            }
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${this.$store.getters.idToken}`
+            }
+          }
+        )
+        .then(responce => {
+          console.log(responce);
+        });
+      // update vuex
+      await axios
+        .get(
+          `https://firestore.googleapis.com/v1/${
+            this.$store.getters.skills[this.$store.getters.skillsIndex].name
+          }/tasks`,
+          {
+            headers: {
+              Authorization: `Bearer ${this.$store.getters.idToken}`
+            }
+          }
+        )
+        .then(responce => {
+          console.log(responce);
+          this.$store.commit("updateTasks", responce.data.documents);
+        });
     },
-    deleteTasks(task) {
-      let index = this.tasks.indexOf(task);
+    async deleteTasks(task) {
+      const index = this.tasks.indexOf(task);
       this.tasks.splice(index, 1);
+      // rest delete
+      await axios
+        .delete(
+          `https://firestore.googleapis.com/v1/${this.$store.getters.tasks[index].name}`,
+          {
+            headers: {
+              Authorization: `Bearer ${this.$store.getters.idToken}`
+            }
+          }
+        )
+        .then(responce => {
+          console.log(responce);
+        });
     },
     initTasks() {
       this.tasks.splice(0, this.tasks.length);
@@ -150,6 +217,30 @@ export default {
         };
         this.$set(this.tasks, index, elementMap);
       });
+    },
+    async patchCheckbox(task) {
+      const index = this.tasks.indexOf(task);
+      // patch
+      await axios
+        .patch(
+          `https://firestore.googleapis.com/v1/${this.$store.getters.tasks[index].name}` +
+            "?updateMask.fieldPaths=checkbox",
+          {
+            fields: {
+              checkbox: {
+                booleanValue: task.done
+              }
+            }
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${this.$store.getters.idToken}`
+            }
+          }
+        )
+        .then(responce => {
+          console.log(responce);
+        });
     }
   },
   created() {

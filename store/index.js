@@ -6,6 +6,7 @@ export const state = () => ({
   skills: [],
   tasks: [],
   skillsIndex: 0,
+  isTimerOn: false,
 })
 
 export const getters = {
@@ -14,6 +15,7 @@ export const getters = {
   skills: state => state.skills,
   tasks: state => state.tasks,
   skillsIndex: state => state.skillsIndex,
+  isTimerOn: state => state.isTimerOn,
 }
 
 export const mutations = {
@@ -29,6 +31,9 @@ export const mutations = {
       state.skills.push(value);
     });
   },
+  initTasks (state) {
+    state.tasks.splice(0, state.tasks.length);
+  },
   updateTasks (state, tasks) {
     state.tasks.splice(0, state.tasks.length);
     tasks.forEach((value, index) => {
@@ -37,6 +42,12 @@ export const mutations = {
   },
   updateSkillsIndex (state, index) {
     state.skillsIndex = index;
+  },
+  updateTimer (state, timer) {
+    Vue.set(state.skills[timer.index].fields, "timerremaining", timer.timerremaining);
+  },
+  updateIsTimerOn (state, isTimerOn) {
+    state.isTimerOn = isTimerOn;
   }
 }
 
@@ -59,6 +70,20 @@ export const actions = {
       .then(responce => {
         commit('updateUid', responce.data.localId);
         commit('updateIdToken', responce.data.idToken);
+        setTimeout(() => {
+          return axios.post("https://securetoken.googleapis.com/v1/token",
+            {
+              grant_type: 'refresh_token',
+              refresh_token: responce.data.refreshToken
+            },
+            {
+              params: {
+                key: process.env.apiKey
+              }
+            }).then(responce => {
+              commit('updateIdToken', responce.data.id_token);
+            })
+        }, responce.data.expiresIn * 1000)
         console.log(responce);
       });
   },
@@ -101,9 +126,33 @@ export const actions = {
         }
       )
       .then(responce => {
-        commit("updateTasks", responce.data.documents);
+        console.log(responce);
+        if (Object.keys(responce.data).length) {
+          commit("updateTasks", responce.data.documents);
+        } else {
+          commit("initTasks");
+        }
       });
     commit("updateSkillsIndex", authData.skillsIndex);
+  },
+  async putTimer ({ commit }, authData) {
+    // update state timer
+    await commit("updateTimer", authData);
+    // patch
+    await axios.patch(`https://firestore.googleapis.com/v1/${authData.apiPath}` + "?updateMask.fieldPaths=timerremaining",
+      {
+        fields: {
+          timerremaining: authData.timerremaining,
+        }
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${authData.idToken}`
+        },
+      }
+    ).then(responce => {
+      console.log(responce);
+    })
   }
 
 }

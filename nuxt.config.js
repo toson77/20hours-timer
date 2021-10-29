@@ -38,7 +38,7 @@ export default {
   buildModules: [
     // https://go.nuxtjs.dev/vuetify
     '@nuxtjs/vuetify'
-    
+
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
@@ -48,7 +48,14 @@ export default {
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
-  axios: {},
+  axios: { proxy: true },
+
+  proxy: {
+    '/postskills/': {
+      target: 'https://firestore.googleapis.com/v1/projects/hours-timer/databases/(default)/documents/users/',
+      pathRewrite: { '^/postskills/': '' },
+    }
+  },
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {
