@@ -56,8 +56,8 @@ export const mutations = {
 }
 
 export const actions = {
-  login ({ commit }, authData) {
-    return axios
+  login ({ commit, dispatch }, authData) {
+    axios
       .post(
         "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword",
         {
@@ -75,21 +75,27 @@ export const actions = {
         commit('updateUid', responce.data.localId);
         commit('updateIdToken', responce.data.idToken);
         setTimeout(() => {
-          return axios.post("https://securetoken.googleapis.com/v1/token",
-            {
-              grant_type: 'refresh_token',
-              refresh_token: responce.data.refreshToken
-            },
-            {
-              params: {
-                key: process.env.apiKey
-              }
-            }).then(responce => {
-              commit('updateIdToken', responce.data.id_token);
-            })
+          dispatch('refreshIdToken', responce.data.refreshToken);
         }, responce.data.expiresIn * 1000)
         console.log(responce);
       });
+  },
+  refreshIdToken ({ commit, dispatch }, refreshToken) {
+    axios.post("https://securetoken.googleapis.com/v1/token",
+      {
+        grant_type: 'refresh_token',
+        refresh_token: refreshToken
+      },
+      {
+        params: {
+          key: process.env.apiKey
+        }
+      }).then(responce => {
+        commit('updateIdToken', responce.data.id_token);
+        setTimeout(() => {
+          dispatch('refreshIdToken', response.data.refresh_token);
+        }, response.data.expires_in * 1000);
+      })
   },
   logout ({ commit }) {
     commit('updateIdToken', null);
