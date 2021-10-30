@@ -23,6 +23,7 @@ import mySkills from "~/components/skills.vue";
 import myTimer from "~/components/timer.vue";
 
 export default {
+  middleware: "authenticated",
   data: () => ({
     color: "light-blue darken-3"
   }),
