@@ -76,10 +76,11 @@ export const actions = {
         commit('updateIdToken', responce.data.idToken);
         setTimeout(() => {
           dispatch('refreshIdToken', responce.data.refreshToken);
-        }, responce.data.expiresIn * 1000)
+        }, responce.data.expiresIn * 900)
         console.log(responce);
       });
   },
+  //expires_in*900秒毎に再帰的に実行
   refreshIdToken ({ commit, dispatch }, refreshToken) {
     axios.post("https://securetoken.googleapis.com/v1/token",
       {
@@ -94,7 +95,7 @@ export const actions = {
         commit('updateIdToken', responce.data.id_token);
         setTimeout(() => {
           dispatch('refreshIdToken', response.data.refresh_token);
-        }, response.data.expires_in * 1000);
+        }, response.data.expires_in * 900);
       })
   },
   logout ({ commit }) {
