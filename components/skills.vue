@@ -49,35 +49,47 @@
             class="white"
           >
             <v-row>
-              <v-btn
-                block
-                text
-                :disabled="isTimerOn"
-                @click="changeSkill(skill)"
+              <v-col
+                cols="10"
+                class="mr-0"
               >
-                <v-col cols="1">
-                </v-col>
-                <v-col cols="3">
-                  <strong
-                    v-text="skill.text"
-                    slot="label"
-                    :class="skill.done && 'grey--text' || 'text--primary'"
-                  ></strong>
-                </v-col>
-                <v-col>
-                  <v-progress-linear
-                    :value="skill.power"
-                    color="teal accent-4"
-                    height="25"
-                  >
-
-                    <!-- <template v-slot:default="{ value }"> -->
-                    <strong>{{ Math.ceil(skill.power) }}%</strong>
-                    <!-- </template> -->
-                  </v-progress-linear>
-                </v-col>
-                <v-col cols="1"></v-col>
-              </v-btn>
+                <v-btn
+                  class="pr-0"
+                  text
+                  block
+                  :disabled="isTimerOn"
+                  @click="changeSkill(skill)"
+                >
+                  <v-col cols="3">
+                    <strong
+                      v-text="skill.text"
+                      slot="label"
+                      :class="skill.done && 'grey--text' || 'text--primary'"
+                    ></strong>
+                  </v-col>
+                  <v-col cols="9">
+                    <v-progress-linear
+                      :value="skill.power"
+                      color="teal accent-4"
+                      height="25"
+                    >
+                      <strong>{{ Math.ceil(skill.power) }}%</strong>
+                    </v-progress-linear>
+                  </v-col>
+                </v-btn>
+              </v-col>
+              <v-col
+                cols="2"
+                class="pr-0 pl-7"
+              >
+                <v-btn
+                  text
+                  icon
+                  @click="deleteSkill(skill)"
+                >
+                  <i class="mdi mdi-delete " />
+                </v-btn>
+              </v-col>
             </v-row>
 
           </v-list-item>
@@ -138,7 +150,7 @@ export default {
   },
 
   methods: {
-    async create() {
+    create() {
       this.skills.push({
         power: 0,
         done: false,
@@ -146,6 +158,37 @@ export default {
         apiPath: ""
       });
       this.skill = null;
+    },
+    async deleteSkill(skill) {
+      const index = this.skills.indexOf(skill);
+      this.skills.splice(index, 1);
+      // rest delete
+      await axios
+        .delete(
+          `https://firestore.googleapis.com/v1/${this.$store.getters.skills[index].name}`,
+          {
+            headers: {
+              Authorization: `Bearer ${this.$store.getters.idToken}`
+            }
+          }
+        )
+        .then(responce => {
+          console.log(responce);
+        });
+      //get new skill list
+      await axios
+        .get(
+          `https://firestore.googleapis.com/v1/projects/hours-timer/databases/(default)/documents/users/${this.uid}/skills`,
+          {
+            headers: {
+              Authorization: `Bearer ${this.idToken}`
+            }
+          }
+        )
+        .then(responce => {
+          console.log(responce);
+          this.$store.dispatch("actionSetSkills", responce.data.documents);
+        });
     },
     async updateDb() {
       const skillname = this.skill;

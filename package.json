@@ -16,7 +16,8 @@
     "nuxt": "^2.15.7",
     "vue-router": "^3.5.2",
     "vue2-timepicker": "^1.1.6",
-    "vuetify": "^2.5.5"
+    "vuetify": "^2.5.5",
+    "vuex-persistedstate": "^4.1.0"
   },
   "devDependencies": {
     "@nuxtjs/vuetify": "^1.12.1"

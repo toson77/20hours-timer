@@ -2,7 +2,7 @@ import colors from 'vuetify/es5/util/colors'
 
 export default {
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
-  ssr: true,
+  ssr: false,
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
@@ -29,6 +29,7 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
+    { src: '~/plugins/persistedState.client.js' }
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -48,14 +49,7 @@ export default {
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
-  axios: { proxy: true },
-
-  proxy: {
-    '/postskills/': {
-      target: 'https://firestore.googleapis.com/v1/projects/hours-timer/databases/(default)/documents/users/',
-      pathRewrite: { '^/postskills/': '' },
-    }
-  },
+  axios: {},
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {
