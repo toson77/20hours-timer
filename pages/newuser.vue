@@ -30,19 +30,24 @@
               outlined
             />
             <v-text-field
-              :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+              :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+              :type="showPassword ? 'text' : 'password'"
               label="パスワードを入力"
-              :type="'password'"
-              placeholder="8文字以上"
+              placeholder="英小文字大文字数字8文字以上"
+              :rules="[rules.required, rules.checkPassword]"
               v-model.trim="password"
               outlined
+              @click:append="showPassword = !showPassword"
             />
             <v-text-field
+              :append-icon="showPassword2 ? 'mdi-eye' : 'mdi-eye-off'"
+              :type="showPassword2 ? 'text':'password'"
               label="パスワードを再入力"
-              placeholder="8文字以上"
-              :type="'password'"
+              placeholder="英小文字大文字数字8文字以上"
+              :rules="[rules.required, verificatePassword()]"
               v-model.trim="passwordCheckVal"
               outlined
+              @click:append="showPassword2 =! showPassword2"
             />
             <v-btn
               block
@@ -73,8 +78,20 @@ export default {
   data: () => ({
     appName: "20時間タイマー",
     email: "test2@test.com",
-    password: "test1234",
-    passwordCheckVal: ""
+    password: "",
+    passwordCheckVal: "",
+    //password validation
+    showPassword: false,
+    showPassword2: false,
+    rules: {
+      required: value => !!value || "必須項目です",
+      checkPassword: value => {
+        return (
+          /^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?\d)[a-zA-Z\d]{8,100}$/.test(value) ||
+          "半角英小文字大文字数字をそれぞれ1種類以上含む8文字以上にしてください"
+        );
+      }
+    }
   }),
   computed: {
     idToken() {
@@ -85,6 +102,9 @@ export default {
     }
   },
   methods: {
+    verificatePassword() {
+      return this.password == this.passwordCheckVal ? true : "一致しません";
+    },
     async register() {
       const datetime = new Date();
       await this.$store.dispatch("register", {
