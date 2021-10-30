@@ -93,28 +93,33 @@ export default {
         )
         .then(responce => {
           console.log(responce);
-          this.$store.dispatch("actionSetSkills", responce.data.documents);
+          if (Object.keys(responce.data).length) {
+            this.$store.dispatch("actionSetSkills", responce.data.documents);
+          } else {
+            this.$store.commit("initSkills");
+          }
           console.log(this.$store.getters.skills);
         });
-      // get tasks of skill[0]
-      await axios
-        .get(
-          `https://firestore.googleapis.com/v1/${this.$store.getters.skills[0].name}/tasks`,
-          {
+
+      const skills = this.$store.getters.skills;
+      if (Object.keys(skills).length) {
+        // get tasks of skill[0]
+        await axios
+          .get(`https://firestore.googleapis.com/v1/${skills[0].name}/tasks`, {
             headers: {
               Authorization: `Bearer ${this.idToken}`
             }
-          }
-        )
-        .then(responce => {
-          console.log(responce);
-          if (Object.keys(responce.data).length) {
-            this.$store.dispatch("actionSetTasks", responce.data.documents);
-          } else {
-            this.$store.commit("initTasks");
-          }
-          console.log(this.$store.getters.tasks);
-        });
+          })
+          .then(responce => {
+            console.log(responce);
+            if (Object.keys(responce.data).length) {
+              this.$store.dispatch("actionSetTasks", responce.data.documents);
+            } else {
+              this.$store.commit("initTasks");
+            }
+            console.log(this.$store.getters.tasks);
+          });
+      }
       this.$router.push({ name: "index" });
     }
   }

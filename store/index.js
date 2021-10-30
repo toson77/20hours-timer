@@ -26,6 +26,9 @@ export const mutations = {
   updateUid (state, uid) {
     state.uid = uid;
   },
+  initSkills (state) {
+    state.skills.splice(0, state.skills.length);
+  },
   updateSkills (state, skills) {
     state.skills.splice(0, state.skills.length);
     skills.forEach((value, index) => {
