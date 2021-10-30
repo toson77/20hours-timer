@@ -74,63 +74,73 @@
       <br>
       <v-row>
         <v-spacer></v-spacer>
-        <v-btn
-          height="50px"
-          width="180px"
-          v-on:click="start"
-          v-if="!timerOn && state == '20hour'"
-        ><strong
-            style="color:#1976D2"
-            class="text-h6"
-          >start</strong></v-btn>
-        <v-btn
-          height="50px"
-          width="180px"
-          v-on:click="stop"
-          v-if="timerOn && state == '20hour'"
-        ><strong
-            style="color:#1976D2"
-            class="text-h6"
-          >stop</strong></v-btn>
+        <template v-if="isSetStoreSkills">
+          <v-btn
+            height="50px"
+            width="180px"
+            v-on:click="start"
+            v-if="!timerOn && state == '20hour'"
+          ><strong
+              style="color:#1976D2"
+              class="text-h6"
+            >start</strong></v-btn>
+          <v-btn
+            height="50px"
+            width="180px"
+            v-on:click="stop"
+            v-if="timerOn && state == '20hour'"
+          ><strong
+              style="color:#1976D2"
+              class="text-h6"
+            >stop</strong></v-btn>
 
-        <v-btn
-          height="50px"
-          width="180px"
-          v-on:click="start_20"
-          v-if="!timerOn_20 && state == '20min'"
-        ><strong
-            style="color:#26A69A"
-            class="text-h6"
-          >start</strong></v-btn>
-        <v-btn
-          height="50px"
-          width="180px"
-          v-on:click="stop_20"
-          v-if="timerOn_20 && state == '20min'"
-        ><strong
-            style="color:#26A69A"
-            class="text-h6"
-          >stop</strong></v-btn>
+          <v-btn
+            height="50px"
+            width="180px"
+            v-on:click="start_20"
+            v-if="!timerOn_20 && state == '20min'"
+          ><strong
+              style="color:#26A69A"
+              class="text-h6"
+            >start</strong></v-btn>
+          <v-btn
+            height="50px"
+            width="180px"
+            v-on:click="stop_20"
+            v-if="timerOn_20 && state == '20min'"
+          ><strong
+              style="color:#26A69A"
+              class="text-h6"
+            >stop</strong></v-btn>
 
-        <v-btn
-          height="50px"
-          width="180px"
-          @click="start_custom"
-          v-if="!timerOn_custom && state == 'custom'"
-        ><strong
-            style="color:#EF5350"
-            class="text-h6"
-          >start</strong></v-btn>
-        <v-btn
-          height="50px"
-          width="180px"
-          v-on:click="stop_custom"
-          v-if="timerOn_custom && state == 'custom'"
-        ><strong
-            style="color:#EF5350"
-            class="text-h6"
-          >stop</strong></v-btn>
-        <v-spacer></v-spacer>
+          <v-btn
+            height="50px"
+            width="180px"
+            @click="start_custom"
+            v-if="!timerOn_custom && state == 'custom'"
+          ><strong
+              style="color:#EF5350"
+              class="text-h6"
+            >start</strong></v-btn>
+          <v-btn
+            height="50px"
+            width="180px"
+            v-on:click="stop_custom"
+            v-if="timerOn_custom && state == 'custom'"
+          ><strong
+              style="color:#EF5350"
+              class="text-h6"
+            >stop</strong></v-btn>
+          <v-spacer></v-spacer>
+        </template>
+        <template v-else>
+          <v-card-text
+            class="text-h6 gray--text"
+            align="center"
+          >
+            Please Add Skill
+          </v-card-text>
+        </template>
       </v-row>
     </v-card>
   </v-container>
@@ -306,15 +316,22 @@ export default {
     },
     //change skills and change timer
     initTimer() {
-      const timerMap = this.$store.getters.skills[
-        this.$store.getters.skillsIndex
-      ].fields.timerremaining.mapValue.fields;
-      this.hour_t = timerMap.hour.integerValue;
-      this.min_t = timerMap.min.integerValue;
-      this.sec = timerMap.sec.integerValue;
+      const gettedSkills = this.$store.getters.skills;
+      if (Object.keys(gettedSkills).length) {
+        const timerMap =
+          gettedSkills[this.$store.getters.skillsIndex].fields.timerremaining
+            .mapValue.fields;
+        this.hour_t = timerMap.hour.integerValue;
+        this.min_t = timerMap.min.integerValue;
+        this.sec = timerMap.sec.integerValue;
+      }
     }
   },
   computed: {
+    isSetStoreSkills() {
+      const gettedSkills = this.$store.getters.skills;
+      return Object.keys(gettedSkills).length ? true : false;
+    },
     formatTime() {
       const timeStrings = [
         this.hour_t.toString(),
@@ -365,12 +382,13 @@ export default {
   },
   created() {
     // timer first skill[0]
-    const timerMap = this.$store.getters.skills[0].fields.timerremaining
-      .mapValue.fields;
-    console.log(timerMap);
-    this.hour_t = timerMap.hour.integerValue;
-    this.min_t = timerMap.min.integerValue;
-    this.sec = timerMap.sec.integerValue;
+    const gettedSkills = this.$store.getters.skills;
+    if (Object.keys(gettedSkills).length) {
+      const timerMap = gettedSkills[0].fields.timerremaining.mapValue.fields;
+      this.hour_t = timerMap.hour.integerValue;
+      this.min_t = timerMap.min.integerValue;
+      this.sec = timerMap.sec.integerValue;
+    }
   },
   //  watch change skills
   watch: {

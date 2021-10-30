@@ -1,3 +1,4 @@
+import { mdiRouter } from "@mdi/js";
 import axios from "axios";
 import Vue from "vue";
 export const state = () => ({
@@ -24,6 +25,9 @@ export const mutations = {
   },
   updateUid (state, uid) {
     state.uid = uid;
+  },
+  initSkills (state) {
+    state.skills.splice(0, state.skills.length);
   },
   updateSkills (state, skills) {
     state.skills.splice(0, state.skills.length);
@@ -86,6 +90,10 @@ export const actions = {
         }, responce.data.expiresIn * 1000)
         console.log(responce);
       });
+  },
+  logout ({ commit }) {
+    commit('updateIdToken', null);
+    this.$router.push('/login');
   },
   register ({ commit }, authData) {
     return axios
