@@ -77,5 +77,8 @@ export default {
   //.env
   env: {
     apiKey: process.env.VUE_APP_FIREBASE_AUTH_KEY,
+  },
+  generate: {
+    dir: "public"
   }
 }
