@@ -57,7 +57,7 @@ export const mutations = {
 
 export const actions = {
   login ({ commit, dispatch }, authData) {
-    axios
+    return axios
       .post(
         "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword",
         {
