@@ -73,25 +73,25 @@ import axios from "axios";
 export default {
   components: {
     myHeader,
-    myFooter
+    myFooter,
   },
   data: () => ({
     appName: "20時間タイマー",
-    email: "test2@test.com",
+    email: "",
     password: "",
     passwordCheckVal: "",
     //password validation
     showPassword: false,
     showPassword2: false,
     rules: {
-      required: value => !!value || "必須項目です",
-      checkPassword: value => {
+      required: (value) => !!value || "必須項目です",
+      checkPassword: (value) => {
         return (
           /^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?\d)[a-zA-Z\d]{8,100}$/.test(value) ||
           "半角英小文字大文字数字をそれぞれ1種類以上含む8文字以上にしてください"
         );
-      }
-    }
+      },
+    },
   }),
   computed: {
     idToken() {
@@ -99,7 +99,7 @@ export default {
     },
     uid() {
       return this.$store.getters.uid;
-    }
+    },
   },
   methods: {
     verificatePassword() {
@@ -109,7 +109,7 @@ export default {
       const datetime = new Date();
       await this.$store.dispatch("register", {
         email: this.email,
-        password: this.password
+        password: this.password,
       });
       await axios
         .post(
@@ -117,36 +117,36 @@ export default {
           {
             fields: {
               email: {
-                stringValue: this.email
+                stringValue: this.email,
               },
               username: {
-                stringValue: ""
+                stringValue: "",
               },
               create_at: {
-                timestampValue: datetime.toISOString()
+                timestampValue: datetime.toISOString(),
               },
               update_at: {
-                timestampValue: datetime.toISOString()
-              }
-            }
+                timestampValue: datetime.toISOString(),
+              },
+            },
           },
           {
             params: {
-              documentId: this.uid
+              documentId: this.uid,
             },
             headers: {
-              Authorization: `Bearer ${this.idToken}`
-            }
+              Authorization: `Bearer ${this.idToken}`,
+            },
           }
         )
-        .then(responce => {
+        .then((responce) => {
           console.log(responce);
         });
     },
     test() {
       console.log(this.$store.getters.uid);
       console.log(this.$store.getters.idToken);
-    }
-  }
+    },
+  },
 };
 </script>
