@@ -15,3 +15,5 @@ jobs:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_HOURS_TIMER }}'
           projectId: hours-timer
+          env:
+            VUE_APP_FIREBASE_AUTH_KEY: ${{ secrets.VUE_APP_FIREBASE_AUTH_KEY}}
