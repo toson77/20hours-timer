@@ -1,6 +1,7 @@
 <template>
   <v-footer
     padless
+    absolute
   >
     <v-col
       class="text-center"
@@ -16,15 +17,14 @@
 <script>
 export default {
   data: () => ({
-    appName: "20時間タイマー"
-    
+    appName: "20時間タイマー",
   }),
   computed: {
-    copyRightYear () {
-      const start = 2021
-      const now = new Date().getFullYear()
-      return (start === now) ? start : `${start} - ${now}`
-    }
-  }
-}
+    copyRightYear() {
+      const start = 2021;
+      const now = new Date().getFullYear();
+      return start === now ? start : `${start} - ${now}`;
+    },
+  },
+};
 </script>

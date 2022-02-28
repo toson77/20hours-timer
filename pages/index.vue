@@ -25,21 +25,19 @@ import myTimer from "~/components/timer.vue";
 export default {
   middleware: "authenticated",
   data: () => ({
-    color: "light-blue darken-3"
+    color: "light-blue darken-3",
   }),
   components: {
     myHeader,
     myFooter,
     myTask,
     mySkills,
-    myTimer
+    myTimer,
   },
   computed: {
     idToken() {
       return this.$store.getters.idToken;
-    }
-  }
+    },
+  },
 };
 </script>
-
-
