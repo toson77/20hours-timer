@@ -60,12 +60,12 @@ import axios from "axios";
 export default {
   components: {
     myHeader,
-    myFooter
+    myFooter,
   },
   data: () => ({
     appName: "20時間タイマー",
     email: "",
-    password: ""
+    password: "",
   }),
   computed: {
     idToken() {
@@ -73,13 +73,13 @@ export default {
     },
     uid() {
       return this.$store.getters.uid;
-    }
+    },
   },
   methods: {
     async login() {
       await this.$store.dispatch("login", {
         email: this.email,
-        password: this.password
+        password: this.password,
       });
       // get skills
       await axios
@@ -87,11 +87,11 @@ export default {
           `https://firestore.googleapis.com/v1/projects/hours-timer/databases/(default)/documents/users/${this.uid}/skills`,
           {
             headers: {
-              Authorization: `Bearer ${this.idToken}`
-            }
+              Authorization: `Bearer ${this.idToken}`,
+            },
           }
         )
-        .then(responce => {
+        .then((responce) => {
           console.log(responce);
           if (Object.keys(responce.data).length) {
             this.$store.dispatch("actionSetSkills", responce.data.documents);
@@ -107,10 +107,10 @@ export default {
         await axios
           .get(`https://firestore.googleapis.com/v1/${skills[0].name}/tasks`, {
             headers: {
-              Authorization: `Bearer ${this.idToken}`
-            }
+              Authorization: `Bearer ${this.idToken}`,
+            },
           })
-          .then(responce => {
+          .then((responce) => {
             console.log(responce);
             if (Object.keys(responce.data).length) {
               this.$store.dispatch("actionSetTasks", responce.data.documents);
@@ -121,7 +121,8 @@ export default {
           });
       }
       this.$router.push({ name: "index" });
-    }
-  }
+    },
+  },
 };
 </script>
+
